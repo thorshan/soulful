@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const TokenBlacklist = require('../models/TokenBlacklist');
 const User = require('../models/User');
 
-const auth = async (req, res) => {
+const auth = async (req, res, next) => {
     const authHeader = req.headers.authorization;
     if(!authHeader || !authHeader.startsWith("Bearer "))
         return res.status(401).json({ message: "No token provided, Authorization denied!"});

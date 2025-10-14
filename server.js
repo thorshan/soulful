@@ -8,19 +8,11 @@ const connectToDb = require("./config/database");
 connectToDb();
 
 // API
-app.use(
-  cors({
-    origin:
-      "https://3000-firebase-test-1760334247704.cluster-fkltigo73ncaixtmokrzxhwsfc.cloudworkstations.dev",
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    credentials: true,
-  })
-);
+app.use(cors());
 
 // Middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-
 
 // Route Config
 const authRoute = require("./routes/authRoute");
