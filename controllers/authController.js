@@ -79,8 +79,8 @@ const logout = async (req, res) => {
   if (!token) return res.status(400).json({ message: "No token provided" });
   try {
     const decoded = jwt.decode(token);
-    const expiresAt = new Date(decoded.exp * 1000);
-    await TokenBlacklist.create({ token, expiresAt });
+    const expiredAt = new Date(decoded.exp * 1000);
+    await TokenBlacklist.create({ token, expiredAt });
     res.json({ message: "Logout successfully, token invalidated" });
   } catch (err) {
     res.status(500).json({ message: "Logout failed", error: err.message });
