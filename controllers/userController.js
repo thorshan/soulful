@@ -1,4 +1,18 @@
 const User = require("../models/User");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+
+// Generate token
+const createToken = (user) => {
+  return jwt.sign(
+    {
+      id: user._id,
+      role: user.role,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: process.env.JWT_EXPIRES || "1d" }
+  );
+};
 
 // Get all users
 const allUsers = async (req, res) => {
@@ -52,7 +66,9 @@ const createUser = async (req, res) => {
       token,
     });
   } catch (err) {
-    res.status(500).json({ message: "Failed to add user.", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Failed to add user.", error: err.message });
   }
 };
 
