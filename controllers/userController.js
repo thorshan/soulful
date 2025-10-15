@@ -74,12 +74,7 @@ const updateUser = async (req, res) => {
     await user.save();
     res.json({
       message: "User updated successfully",
-      user: {
-        id: user._id,
-        name: user.name,
-        email: user.email,
-        role: user.role,
-      },
+      user,
     });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -99,9 +94,9 @@ const deleteUser = async (req, res) => {
 };
 
 module.exports = {
-    allUsers,
-    getUser,
-    createUser,
-    updateUser,
-    deleteUser
-}
+  allUsers,
+  getUser,
+  createUser,
+  updateUser,
+  deleteUser,
+};
