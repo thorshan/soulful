@@ -5,6 +5,7 @@ const auth = require('../middleware/auth');
 const role = require('../middleware/role');
 
 router.get("/users", auth, role(["admin"]), userController.allUsers);
+router.post("/users", auth, role(["admin"]), userController.createUser);
 router.get("/users/:id", auth, role(["admin"]), userController.getUser);
 router.put("/users/:id", auth, role(["admin"]), userController.updateUser);
 router.delete("/users/:id", auth, role(["admin"]), userController.deleteUser);

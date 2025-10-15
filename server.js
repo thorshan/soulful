@@ -17,10 +17,12 @@ app.use(express.json());
 // Route Config
 const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
+const brandRoute = require("./routes/brandRoute");
 
 // App Routes
 app.use("/api", authRoute);
 app.use("/api", userRoute);
+app.use("/api", brandRoute);
 
 // Server Processing
 const PORT = process.env.PORT || 3000;
