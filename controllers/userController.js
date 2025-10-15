@@ -21,6 +21,39 @@ const getUser = async (req, res) => {
   }
 };
 
+// Create user
+const createUser = async (req, res) => {
+  const { name, email, password, role } = req.body;
+  const hashedPass = await bcrypt.hash(password, 10);
+  try {
+    const user = await User.create({
+      name,
+      email,
+      password: hashedPass,
+      role,
+    });
+    if (user)
+      return res
+        .status(401)
+        .json({ message: "User with this email address already exist." });
+    const token = createToken(user);
+    res.json({
+      message: "User added successfully.",
+      user: {
+        id: user._id,
+        email: user.email,
+        password: user.hashedPass,
+        role: user.role,
+      },
+      token,
+    });
+  } catch (err) {
+    res
+      .status(500)
+      .json({ message: "Failed to add user.", error: err.message });
+  }
+};
+
 // Update user
 const updateUser = async (req, res) => {
   try {
@@ -68,6 +101,7 @@ const deleteUser = async (req, res) => {
 module.exports = {
     allUsers,
     getUser,
+    createUser,
     updateUser,
     deleteUser
 }
