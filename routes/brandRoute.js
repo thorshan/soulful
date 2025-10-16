@@ -4,7 +4,7 @@ const brandController = require('../controllers/brandController');
 const auth = require('../middleware/auth');
 const role = require('../middleware/role');
 
-router.get('/brands', auth, role(["admin"]), brandController.getAllBrands);
+router.get('/brands', auth, role(["admin", "moderator"]), brandController.getAllBrands);
 router.post('/brands', auth, role(["admin"]), brandController.createBrand);
 router.get('/brands/:id', auth, role(["admin"]), brandController.getBrand);
 router.put('/brands/:id', auth, role(["admin"]), brandController.updateBrand);
