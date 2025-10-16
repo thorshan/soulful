@@ -19,12 +19,14 @@ const authRoute = require("./routes/authRoute");
 const userRoute = require("./routes/userRoute");
 const brandRoute = require("./routes/brandRoute");
 const categoryRoute = require("./routes/categoryRoute");
+const itemRoute = require("./routes/itemRoute");
 
 // App Routes
-app.use("/api", authRoute);
-app.use("/api", userRoute);
-app.use("/api", brandRoute);
-app.use("/api", categoryRoute);
+app.use("/api", authRoute); // Login/Logout/Register
+app.use("/api", userRoute); // User Route
+app.use("/api", brandRoute); // Brand Route
+app.use("/api", categoryRoute); // Category Route
+app.use("/api", itemRoute); // Item Route
 
 // Server Processing
 const PORT = process.env.PORT || 3000;
