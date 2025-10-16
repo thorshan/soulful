@@ -4,8 +4,8 @@ const Item = require("../models/Items");
 const getAllItems = async (req, res) => {
   try {
     const items = await Item.find()
-      .populate("Category", "name")
-      .populate("Brand", "name")
+      .populate("category", "name")
+      .populate("brand", "name")
       .sort({ createdAt: -1 });
     res.json(items);
   } catch (error) {
@@ -61,8 +61,8 @@ const updateItem = async (req, res) => {
 const getItem = async (req, res) => {
   try {
     const item = await Item.findById(req.params.id)
-      .populate("Category", "name")
-      .populate("Brand", "name");
+      .populate("category", "name")
+      .populate("brand", "name");
     if (!item) return res.json({ message: "Item not found." });
     res.json(item);
   } catch (error) {
