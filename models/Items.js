@@ -22,6 +22,7 @@ const ItemSchema = new mongoose.Schema({
     itemCode: {
         type: String,
         required: true,
+        unique: true,
     },
     price: {
         type: Number,
