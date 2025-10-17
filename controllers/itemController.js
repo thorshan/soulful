@@ -6,6 +6,7 @@ const getAllItems = async (req, res) => {
     const items = await Item.find()
       .populate("category", "name")
       .populate("brand", "name")
+      .populate("createdBy", "name")
       .sort({ createdAt: -1 });
     res.json(items);
   } catch (error) {
@@ -16,7 +17,7 @@ const getAllItems = async (req, res) => {
 // Create Item
 const createItem = async (req, res) => {
   try {
-    const { name, category, brand, description, price, quantity, image, itemCode } =
+    const { name, category, brand, description, price, quantity, image, itemCode, createdBy } =
       req.body;
     const item = await Item.create({
       name,
@@ -27,6 +28,7 @@ const createItem = async (req, res) => {
       quantity,
       image,
       itemCode,
+      createdBy,
     });
     res.json({ message: "Item created successfully.", item });
   } catch (error) {
@@ -38,7 +40,7 @@ const createItem = async (req, res) => {
 const updateItem = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, category, brand, description, price, quantity, image, itemCode } =
+    const { name, category, brand, description, price, quantity, image, itemCode, createdBy } =
       req.body;
     const existing = await Item.findById(id);
     if (!existing) return res.status(401).json({ message: "Item not found" });
@@ -51,6 +53,7 @@ const updateItem = async (req, res) => {
       quantity,
       image,
       itemCode,
+      createdBy,
     };
     const item = await Item.findByIdAndUpdate(id, updateData);
     res.json({ message: "Item updated successfully", item });
@@ -64,7 +67,8 @@ const getItem = async (req, res) => {
   try {
     const item = await Item.findById(req.params.id)
       .populate("category", "name")
-      .populate("brand", "name");
+      .populate("brand", "name")
+      .populate("createdBy", "name");
     if (!item) return res.json({ message: "Item not found." });
     res.json(item);
   } catch (error) {
