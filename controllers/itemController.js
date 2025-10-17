@@ -16,7 +16,7 @@ const getAllItems = async (req, res) => {
 // Create Item
 const createItem = async (req, res) => {
   try {
-    const { name, category, brand, description, price, image, itemCode } =
+    const { name, category, brand, description, price, quantity, image, itemCode } =
       req.body;
     const item = await Item.create({
       name,
@@ -24,6 +24,7 @@ const createItem = async (req, res) => {
       brand,
       description,
       price,
+      quantity,
       image,
       itemCode,
     });
@@ -37,7 +38,7 @@ const createItem = async (req, res) => {
 const updateItem = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, category, brand, description, price, image, itemCode } =
+    const { name, category, brand, description, price, quantity, image, itemCode } =
       req.body;
     const existing = await Item.findById(id);
     if (!existing) return res.status(401).json({ message: "Item not found" });
@@ -47,6 +48,7 @@ const updateItem = async (req, res) => {
       brand,
       description,
       price,
+      quantity,
       image,
       itemCode,
     };

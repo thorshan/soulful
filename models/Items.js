@@ -28,18 +28,26 @@ const ItemSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
+    quantity: {
+		type: Number,
+        required: true,
+    },
     description: {
         type: String,
         default: "",
     },
     hasStock: {
         type: String,
-        enum: ["In Stock", "Out of Stock"],
-        default: "In Stock",
+        enum: ["Instock", "Out of Stock"],
+        default: "Instock",
     },
     review: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Review",
+    },
+    createdBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
     }
 }, { timestamps: true });
 
