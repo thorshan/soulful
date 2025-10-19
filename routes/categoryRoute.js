@@ -4,9 +4,9 @@ const categoryController = require('../controllers/categoryController');
 const auth = require('../middleware/auth');
 const role = require('../middleware/role');
 
-router.get('/categories', auth, role(["admin", "moderator"]), categoryController.getAllCategories);
+router.get('/categories', categoryController.getAllCategories);
 router.post('/categories', auth, role(["admin"]), categoryController.createCategory);
-router.get('/categories/:id', auth, role(["admin"]), categoryController.getCategory);
+router.get('/categories/:id', categoryController.getCategory);
 router.put('/categories/:id', auth, role(["admin"]), categoryController.updateCategory);
 router.delete('/categories/:id', auth, role(["admin"]), categoryController.deleteCategory);
 
