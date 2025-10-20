@@ -20,6 +20,8 @@ const userRoute = require("./routes/userRoute");
 const brandRoute = require("./routes/brandRoute");
 const categoryRoute = require("./routes/categoryRoute");
 const itemRoute = require("./routes/itemRoute");
+const reviewRoute = require("./routes/reviewRoute");
+const promoRoute = require("./routes/promoRoute");
 
 // App Routes
 app.use("/api", authRoute); // Login/Logout/Register
@@ -27,6 +29,8 @@ app.use("/api", userRoute); // User Route
 app.use("/api", brandRoute); // Brand Route
 app.use("/api", categoryRoute); // Category Route
 app.use("/api", itemRoute); // Item Route
+app.use("/api", reviewRoute); // Review Route
+app.use("/api", promoRoute); // Promo Route
 
 // Server Processing
 const PORT = process.env.PORT || 3000;
