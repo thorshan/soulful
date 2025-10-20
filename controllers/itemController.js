@@ -14,11 +14,36 @@ const getAllItems = async (req, res) => {
   }
 };
 
+const getItemWithReviews = async (req, res) => {
+  try {
+    const item = await Item.findById(req.params.id)
+    .populate("category", "name")
+    .populate("brand", "name")
+    .populate({
+      path: "reviews",
+      populate: { path: "user", select: "name" },
+    });
+    if (!item) return res.json({ message: "Item not found." });
+    res.json(item);
+  } catch (error) {
+    res.status(500).json({ message: "Error getting item", error });
+  }
+};
+
 // Create Item
 const createItem = async (req, res) => {
   try {
-    const { name, category, brand, description, price, quantity, image, itemCode, createdBy } =
-      req.body;
+    const {
+      name,
+      category,
+      brand,
+      description,
+      price,
+      quantity,
+      image,
+      itemCode,
+      createdBy,
+    } = req.body;
     const item = await Item.create({
       name,
       category,
@@ -40,8 +65,17 @@ const createItem = async (req, res) => {
 const updateItem = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, category, brand, description, price, quantity, image, itemCode, createdBy } =
-      req.body;
+    const {
+      name,
+      category,
+      brand,
+      description,
+      price,
+      quantity,
+      image,
+      itemCode,
+      createdBy,
+    } = req.body;
     const existing = await Item.findById(id);
     if (!existing) return res.status(401).json({ message: "Item not found" });
     const updateData = {

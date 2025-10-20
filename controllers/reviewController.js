@@ -1,4 +1,5 @@
 const Review = require("../models/Review");
+const Item = require("../models/Item");
 
 // Get all reviews
 const getAllReviews = async (req, res) => {
@@ -24,6 +25,7 @@ const createReview = async (req, res) => {
       reviewRating,
       user,
     });
+    await Item.findByIdAndUpdate(item, { $push: { reviews: review._id } });
     res.json({ message: "Review created.", review });
   } catch (error) {
     res.status(500).json({ message: "Error creating review", error });
