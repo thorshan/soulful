@@ -1,5 +1,5 @@
 const Promotion = require("../models/Promotion");
-const Item = require("../models/Items");
+const Item = require("../models/Item");
 
 // Get all promos
 const getAllPromos = async (req, res) => {

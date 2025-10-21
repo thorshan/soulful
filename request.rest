@@ -1,0 +1,9 @@
+GET https://5000-firebase-test-1760334247704.cluster-fkltigo73ncaixtmokrzxhwsfc.cloudworkstations.dev/api/reviews/68f712adbe8ac6c789db9ec0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZWY3N2ExODFjYjIyNDBiZDU2OGJmNCIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzYxMDIzMjU0LCJleHAiOjE3NjExMDk2NTR9.BHlxoyjX-07OJa5SxEd8sjw2gVE19RlyRJZi2W2s33k
+
+###
+GET https://5000-firebase-test-1760334247704.cluster-fkltigo73ncaixtmokrzxhwsfc.cloudworkstations.dev/api/soulful-psd8.onrender.com/api/reviews
+
+###
+GET http://localhost:5000/api/reviews/review-item/68f712adbe8ac6c789db9ec0
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZWY3N2ExODFjYjIyNDBiZDU2OGJmNCIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzYxMDIzMjU0LCJleHAiOjE3NjExMDk2NTR9.BHlxoyjX-07OJa5SxEd8sjw2gVE19RlyRJZi2W2s33k

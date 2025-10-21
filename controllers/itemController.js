@@ -1,4 +1,4 @@
-const Item = require("../models/Items");
+const Item = require("../models/Item");
 const Review = require("../models/Review");
 const Promotion = require("../models/Promotion");
 
