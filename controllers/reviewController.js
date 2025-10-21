@@ -25,7 +25,6 @@ const createReview = async (req, res) => {
       reviewRating,
       user,
     });
-    await Item.findByIdAndUpdate(item, { $push: { reviews: review._id } });
     res.json({ message: "Review created.", review });
   } catch (error) {
     res.status(500).json({ message: "Error creating review", error });
@@ -40,6 +39,19 @@ const getReview = async (req, res) => {
       .populate("item", "name");
     if (!review) res.json({ message: "Review not found" });
     res.json(review);
+  } catch (error) {
+    res.status(500).json({ message: "Error getting review", error });
+  }
+};
+
+// Get review by Item
+const getReviewByItem = async (req, res) => {
+  try {
+    const { itemId } = req.params;
+    const reviews = await Review.find({ item: itemId })
+      .populate("user", "name email")
+      .populate("item", "name");
+    res.json(reviews);
   } catch (error) {
     res.status(500).json({ message: "Error getting review", error });
   }
@@ -62,4 +74,5 @@ module.exports = {
   createReview,
   getReview,
   deleteReview,
+  getReviewByItem,
 };

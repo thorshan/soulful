@@ -1,10 +1,13 @@
 const Promotion = require("../models/Promotion");
+const Item = require("../models/Items");
 
 // Get all promos
 const getAllPromos = async (req, res) => {
   try {
-    const promotios = await Promotion.find().sort({ createdAt: -1 });
-    res.json(promotios);
+    const promotions = await Promotion.find()
+    .populate("item", "name")
+    .sort({ createdAt: -1 });
+    res.json(promotions);
   } catch (error) {
     res.status(500).json({ message: "Error getting promotions", error });
   }
@@ -13,12 +16,11 @@ const getAllPromos = async (req, res) => {
 // Create promo
 const createPromo = async (req, res) => {
   try {
-    const { title, description, promoCode, promoPrice } = req.body;
+    const { item, title, promoCode, discount, expiryDate } = req.body;
+    const existing = await Item.findById(item);
+    if(!existing) res.json({ message: "Item not found" });
     const promo = await Promotion.create({
-      title,
-      description,
-      promoCode,
-      promoPrice,
+      item, title, promoCode, discount, expiryDate
     });
     res.json({ message: "Promotion created", promo });
   } catch (error) {
@@ -37,14 +39,26 @@ const getPromo = async (req, res) => {
   }
 };
 
+// Get promo by Item
+const getPromoByItem = async (req, res) => {
+  try {
+    const { itemId } = req.params;
+    const promos = await Promotion.find({ item: itemId });
+    if (!promos) res.json({ message: "Promotion not found" });
+    res.json(promos);
+  } catch (error) {
+    res.status(500).json({ message: "Error getting promotion", error });
+  }
+};
+
 // Update promo
 const updatePromo = async (req, res) => {
   try {
     const { id } = req.params;
-    const { title, description, promoCode, promoPrice } = req.body;
+    const { item, title, promoCode, discount, expiryDate } = req.body;
     const existing = await Promotion.findById(id);
     if (!existing) return res.json({ message: "Promotion not found" });
-    const updateData = { title, description, promoCode, promoPrice };
+    const updateData = { item, title, promoCode, discount, expiryDate };
     const promo = await Promotion.findByIdAndUpdate(id, updateData);
     res.json({ message: "Promotion created.", promo });
   } catch (error) {
@@ -70,4 +84,5 @@ module.exports = {
   createPromo,
   updatePromo,
   deletePromo,
+  getPromoByItem,
 };

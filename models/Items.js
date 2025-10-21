@@ -41,12 +41,6 @@ const ItemSchema = new mongoose.Schema({
         enum: ["Instock", "Out of Stock"],
         default: "Instock",
     },
-    reviews: [
-        {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Review",
-        }
-    ],
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",

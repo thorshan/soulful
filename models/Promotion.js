@@ -1,20 +1,25 @@
 const mongoose = require('mongoose');
 
 const PromoSchema = new mongoose.Schema({
+    item: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Item",
+        required: true,
+    },
     title: {
         type: String,
         required: true,
     },
-    description: {
-        type: String,
-        default: "",
-    },
-    prmoCode: {
-        type: String,
+    discount: {
+        type: Number,
         required: true,
     },
-    promoPrice: {
-        type: Number,
+    promoCode: {
+        type: String,
+    },
+    expiryDate: {
+        type: Date,
+        required: true,
     }
 });
 

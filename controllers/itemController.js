@@ -1,4 +1,6 @@
 const Item = require("../models/Items");
+const Review = require("../models/Review");
+const Promotion = require("../models/Promotion");
 
 // Get all Items
 const getAllItems = async (req, res) => {
@@ -14,17 +16,18 @@ const getAllItems = async (req, res) => {
   }
 };
 
-const getItemWithReviews = async (req, res) => {
+const getItemWithAllData = async (req, res) => {
   try {
     const item = await Item.findById(req.params.id)
     .populate("category", "name")
     .populate("brand", "name")
-    .populate({
-      path: "reviews",
-      populate: { path: "user", select: "name" },
-    });
+    .populate("createdBy", "name email");
     if (!item) return res.json({ message: "Item not found." });
-    res.json(item);
+    const [ reviews, promotions ] = await Promise.all([
+      Review.find({item: item._id}),
+      Promotion.find({item: item._id})
+    ]);
+    res.json({...item.toObject(), reviews, promotions });
   } catch (error) {
     res.status(500).json({ message: "Error getting item", error });
   }
@@ -128,4 +131,5 @@ module.exports = {
   getItem,
   updateItem,
   deleteItem,
+  getItemWithAllData,
 };
