@@ -47,8 +47,8 @@ const getReview = async (req, res) => {
 // Get review by Item
 const getReviewByItem = async (req, res) => {
   try {
-    const { itemId } = req.params;
-    const reviews = await Review.find({ item: itemId })
+    const { id } = req.params;
+    const reviews = await Review.find({ item: id })
       .populate("user", "name email")
       .populate("item", "name");
     res.json(reviews);
