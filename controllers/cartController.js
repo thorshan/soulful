@@ -1,86 +1,117 @@
 const Cart = require("../models/Cart");
+// const Item = require("../models/Item");
 
-// Get all carts
-const getAllCarts = async (req, res) => {
-  try {
-    const carts = await Cart.find().populate("item", "name quantity price");
-    res.json(carts);
-  } catch (error) {
-    res.json({ message: "Error getting data", error });
-  }
-};
-
-// Get cart by Id
+// Get cart by user
 const getCart = async (req, res) => {
   try {
-    const cart = await Cart.findById(req.params.id).populate(
-      "item",
-      "name quantity price"
-    );
-    if (!cart) res.json({ message: "Cart not found" });
+    const { userId } = req.params;
+
+    const cart = await Cart.findOne({ user: userId }).populate("items.item");
+    if (!cart) return res.json({ items: [] });
+
     res.json(cart);
   } catch (error) {
-    res.json({ message: "Error getting data", error });
+    res.status(500).json({ message: "Error getting cart", error });
   }
 };
 
-// Get cart by Id
-const getCartItem = async (req, res) => {
+// Add item to cart
+const addToCart = async (req, res) => {
   try {
-    const { id } = req.params;
-    const cart = await Cart.find({ item: id }).populate(
-      "item",
-      "name price"
-    );
-    if (!cart) res.json({ message: "Cart not found" });
-    res.json(cart);
+    const { userId, itemId, quantity } = req.body;
+
+    let cart = await Cart.findOne({ user: userId });
+
+    if (!cart) {
+      // create new cart if none exists
+      cart = new Cart({ user: userId, items: [{ item: itemId, quantity }] });
+    } else {
+      // check if item already exists in cart
+      const itemIndex = cart.items.findIndex(
+        (i) => i.item.toString() === itemId
+      );
+
+      if (itemIndex > -1) {
+        // update quantity
+        cart.items[itemIndex].quantity += quantity;
+      } else {
+        // push new item
+        cart.items.push({ item: itemId, quantity });
+      }
+    }
+
+    await cart.save();
+    const updatedCart = await cart.populate("items.item");
+    res.json(updatedCart);
   } catch (error) {
-    res.json({ message: "Error getting data", error });
+    res.status(500).json({ message: "Error adding to cart", error });
   }
 };
 
-// Create cart
-const createCart = async (req, res) => {
-    try {
-        const { item, quantity } = req.body;
-        const cart = await Cart.create({ item, quantity});
-        res.json({ message: "Cart created", cart });
-        
-    } catch (error) {
-        res.json({ message: "Error creating cart", error });
-    }
-}
+// Update quantity
+const updateQuantity = async (req, res) => {
+  try {
+    const { userId, itemId, quantity } = req.body;
 
-// update Cart
-const updateCart = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { item, quantity } = req.body;
-        const updateData = { item, quantity };
-        const cart = await Cart.findByIdAndUpdate(id, updateData);
-        res.json({ message: "Cart updated", cart }); 
-    } catch (error) {
-        res.json({ message: "Error updating cart", error });
-    }
-}
+    const cart = await Cart.findOne({ user: userId });
+    if (!cart) return res.status(404).json({ message: "Cart not found" });
 
-// Delete cart
-const deleteCart = async (req, res) => {
-    try {
-        const cart = await Cart.findById(req.params.id);
-        if(!cart) res.json({ message: "Cart not found" });
-        await Cart.findByIdAndDelete(cart._id);
-        res.json({ message: "Cart deleted." })
-    } catch (error) {
-        res.json({ message: "Error deleting cart", error });      
-    }
-}
+    const itemIndex = cart.items.findIndex(
+      (i) => i.item.toString() === itemId
+    );
+
+    if (itemIndex === -1)
+      return res.status(404).json({ message: "Item not in cart" });
+
+    cart.items[itemIndex].quantity = quantity;
+    await cart.save();
+
+    const updatedCart = await cart.populate("items.item");
+    res.json(updatedCart);
+  } catch (error) {
+    res.status(500).json({ message: "Error updating quantity", error });
+  }
+};
+
+// Remove item from cart
+const removeFromCart = async (req, res) => {
+  try {
+    const { userId, itemId } = req.body;
+
+    const cart = await Cart.findOne({ user: userId });
+    if (!cart) return res.status(404).json({ message: "Cart not found" });
+
+    cart.items = cart.items.filter((i) => i.item.toString() !== itemId);
+    await cart.save();
+
+    const updatedCart = await cart.populate("items.item");
+    res.json(updatedCart);
+  } catch (error) {
+    res.status(500).json({ message: "Error removing item", error });
+  }
+};
+
+// Clear cart
+const clearCart = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const cart = await Cart.findOneAndUpdate(
+      { user: userId },
+      { items: [] },
+      { new: true }
+    );
+
+    res.json(cart);
+  } catch (error) {
+    res.status(500).json({ message: "Error clearing cart", error });
+  }
+};
 
 module.exports = {
-    getAllCarts,
-    getCart,
-    createCart,
-    updateCart,
-    deleteCart,
-    getCartItem,
+  getCart,
+  updateQuantity,
+  addToCart,
+  removeFromCart,
+  clearCart,
 }

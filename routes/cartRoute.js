@@ -4,11 +4,11 @@ const cartController = require("../controllers/cartController");
 const auth = require("../middleware/auth");
 const role = require("../middleware/role");
 
-router.get("/carts", auth, role(["admin", "moderator", "user"]), cartController.getAllCarts);
-router.post("/carts", cartController.createCart);
-router.get("/carts/:id", auth, role(["admin", "moderator", "user"]), cartController.getCart);
-router.get("/carts/cart/:id", auth, role(["admin", "moderator", "user"]), cartController.getCartItem);
-router.put("/carts/:id", auth, role(["admin", "moderator", "user"]), cartController.updateCart);
-router.delete("/carts/:id", auth, role(["admin", "moderator", "user"]), cartController.deleteCart);
+
+router.get("/cart/:userId", auth, role(["admin", "moderator", "user"]), cartController.getCart);
+router.post("/cart/add", auth, role(["admin", "moderator", "user"]), cartController.addToCart);
+router.put("/cart/update", auth, role(["admin", "moderator", "user"]), cartController.updateQuantity);
+router.delete("/cart/remove", auth, role(["admin", "moderator", "user"]), cartController.removeFromCart);
+router.delete("/cart/clear/:userId", auth, role(["admin", "moderator", "user"]), cartController.clearCart);
 
 module.exports = router;
