@@ -24,6 +24,21 @@ const getCart = async (req, res) => {
   }
 };
 
+// Get cart by Id
+const getCartItem = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const cart = await Cart.find({ item: id }).populate(
+      "item",
+      "name price"
+    );
+    if (!cart) res.json({ message: "Cart not found" });
+    res.json(cart);
+  } catch (error) {
+    res.json({ message: "Error getting data", error });
+  }
+};
+
 // Create cart
 const createCart = async (req, res) => {
     try {
