@@ -5,7 +5,7 @@ const Item = require("../models/Item");
 const getAllPromos = async (req, res) => {
   try {
     const promotions = await Promotion.find()
-    .populate("item", "name")
+    .populate("item", "name itemCode price")
     .sort({ createdAt: -1 });
     res.json(promotions);
   } catch (error) {
@@ -42,9 +42,9 @@ const getPromo = async (req, res) => {
 // Get promo by Item
 const getPromoByItem = async (req, res) => {
   try {
-    const { itemId } = req.params;
-    const promos = await Promotion.find({ item: itemId });
-    if (!promos) res.json({ message: "Promotion not found" });
+    const { id } = req.params;
+    const promos = await Promotion.find({ item: id })
+    .populate("item", "name itemCode price");
     res.json(promos);
   } catch (error) {
     res.status(500).json({ message: "Error getting promotion", error });
