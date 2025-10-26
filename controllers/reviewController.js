@@ -1,11 +1,10 @@
 const Review = require("../models/Review");
-const Item = require("../models/Item");
 
 // Get all reviews
 const getAllReviews = async (req, res) => {
   try {
     const reviews = await Review.find()
-      .populate("user", "name")
+      .populate("user", "name email")
       .populate("item", "name")
       .sort({ createdAt: -1 });
     res.json(reviews);
