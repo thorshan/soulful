@@ -7,7 +7,7 @@ const role = require("../middleware/role");
 router.get('/promotions', promoController.getAllPromos);
 router.post('/promotions', auth, role(["admin", "moderator"]), promoController.createPromo);
 router.get('/promotions/:id', promoController.getPromo);
-router.get('/promotions/:id', promoController.getPromoByItem);
+router.get('/promotions/promotion/:id', promoController.getPromoByItem);
 router.put('/promotions/:id', auth, role(["admin", "moderator"]), promoController.updatePromo);
 router.delete('/promotions/:id', auth, role(["admin", "moderator"]), promoController.deletePromo); 
 
