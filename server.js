@@ -23,6 +23,7 @@ const itemRoute = require("./routes/itemRoute");
 const reviewRoute = require("./routes/reviewRoute");
 const promoRoute = require("./routes/promoRoute");
 const cartRoute = require("./routes/cartRoute");
+const orderRoute = require("./routes/orderRoute");
 
 // App Routes
 app.use("/api", authRoute); // Login/Logout/Register
@@ -33,6 +34,7 @@ app.use("/api", itemRoute); // Item Route
 app.use("/api", reviewRoute); // Review Route
 app.use("/api", promoRoute); // Promo Route
 app.use("/api", cartRoute); // Cart Route
+app.use("/api", orderRoute); // Order Route
 
 // Server Processing
 const PORT = process.env.PORT || 3000;
