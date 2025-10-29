@@ -56,6 +56,19 @@ const getReviewByItem = async (req, res) => {
   }
 };
 
+// Get review by User
+const getReviewByUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const reviews = await Review.find({ user: id })
+      .populate("user", "name email")
+      .populate("item", "name");
+    res.json(reviews);
+  } catch (error) {
+    res.status(500).json({ message: "Error getting review", error });
+  }
+};
+
 // Deltete review
 const deleteReview = async (req, res) => {
   try {
@@ -74,4 +87,5 @@ module.exports = {
   getReview,
   deleteReview,
   getReviewByItem,
+  getReviewByUser,
 };
