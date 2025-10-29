@@ -43,6 +43,8 @@ const login = async (req, res) => {
 // Register
 const register = async (req, res) => {
   const { name, email, password, role } = req.body;
+  const existing = await User.findOne({ email });
+  if(existing) return res.json({ message: "User with this email address already existed" });
   const hashedPass = await bcrypt.hash(password, 10);
   try {
     const user = await User.create({
@@ -51,10 +53,6 @@ const register = async (req, res) => {
       password: hashedPass,
       role,
     });
-    if (user)
-      return res
-        .status(401)
-        .json({ message: "User with this email address already exist." });
     const token = createToken(user);
     res.json({
       message: "User registered successfully.",
