@@ -43,8 +43,8 @@ const getOrder = async (req, res) => {
 // Get order by User
 const getOrderByUser = async (req, res) => {
   try {
-    const { userId } = req.params;
-    const order = await Order.find({ user: userId }).populate(
+    const { id } = req.params;
+    const order = await Order.find({ user: id }).populate(
       "user",
       "name email"
     );
