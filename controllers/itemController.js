@@ -8,7 +8,7 @@ const getAllItems = async (req, res) => {
     const items = await Item.find()
       .populate("category", "name")
       .populate("brand", "name")
-      .populate("createdBy", "name")
+      .populate("createdBy", "name email")
       .sort({ createdAt: -1 });
     res.json(items);
   } catch (error) {
@@ -16,18 +16,33 @@ const getAllItems = async (req, res) => {
   }
 };
 
+// Get item by user
+const getItemByUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const items = await Item.find({ createdBy: id })
+      .populate("category", "name")
+      .populate("brand", "name")
+      .populate("createdBy", "name email")
+      .sort({ createdAt: -1 });
+    res.json(items);
+  } catch (error) {
+    res.status(500).json({ message: "Error getting items", error });
+  }
+}
+
 const getItemWithAllData = async (req, res) => {
   try {
     const item = await Item.findById(req.params.id)
-    .populate("category", "name")
-    .populate("brand", "name")
-    .populate("createdBy", "name email");
+      .populate("category", "name")
+      .populate("brand", "name")
+      .populate("createdBy", "name email");
     if (!item) return res.json({ message: "Item not found." });
-    const [ reviews, promotions ] = await Promise.all([
-      Review.find({item: item._id}),
-      Promotion.find({item: item._id})
+    const [reviews, promotions] = await Promise.all([
+      Review.find({ item: item._id }),
+      Promotion.find({ item: item._id })
     ]);
-    res.json({...item.toObject(), reviews, promotions });
+    res.json({ ...item.toObject(), reviews, promotions });
   } catch (error) {
     res.status(500).json({ message: "Error getting item", error });
   }
