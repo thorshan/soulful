@@ -8,7 +8,7 @@ router.get('/items', itemController.getAllItems);
 router.post('/items', auth, role(["admin", "moderator"]), itemController.createItem);
 router.get('/items/:id', itemController.getItem);
 router.get('/items/:id', itemController.getItemWithAllData);
-router.get('/items/user/:id', itemController.getItemWithAllData);
+router.get('/items/user/:id', itemController.getItemByUser);
 router.put('/items/:id', auth, role(["admin", "moderator"]), itemController.updateItem);
 router.delete('/items/:id', auth, role(["admin", "moderator"]), itemController.deleteItem);
 

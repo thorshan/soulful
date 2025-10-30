@@ -147,4 +147,5 @@ module.exports = {
   updateItem,
   deleteItem,
   getItemWithAllData,
+  getItemByUser,
 };
