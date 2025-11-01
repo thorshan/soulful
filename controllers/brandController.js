@@ -1,4 +1,5 @@
 const Brand = require("../models/Brand");
+const Notification = require("../models/Notification");
 
 // Get all user
 const getAllBrands = async (req, res) => {
@@ -16,7 +17,8 @@ const getAllBrands = async (req, res) => {
 // Create brand
 const createBrand = async (req, res) => {
   try {
-    const { name, image, title, contact, address, incharge, category } = req.body;
+    const { name, image, title, contact, address, incharge, category } =
+      req.body;
     const existing = await Brand.findOne({ name });
     if (existing) res.json({ message: "Brand already exist." });
     const brand = await Brand.create({
@@ -28,7 +30,19 @@ const createBrand = async (req, res) => {
       incharge,
       category,
     });
-    res.json({ message: "Brand created successfully.", brand });
+
+    // Admin notification
+    const adminNotification = await Notification.create({
+      message: `Brand ー 「 ${name} 」  created.`,
+      type: "system",
+      user: null,
+    });
+
+    res.json({
+      message: "Brand created successfully.",
+      brand,
+      adminNotification,
+    });
   } catch (error) {
     res.status(500).json({ message: "Error creating brand.", error });
   }
@@ -51,8 +65,17 @@ const getBrand = async (req, res) => {
 const updateBrand = async (req, res) => {
   try {
     const { id } = req.params;
-    const { name, image, title, contact, address, incharge, category } = req.body;
-    const updateData = { name, image, title, contact, address, incharge, category };
+    const { name, image, title, contact, address, incharge, category } =
+      req.body;
+    const updateData = {
+      name,
+      image,
+      title,
+      contact,
+      address,
+      incharge,
+      category,
+    };
     const brand = await Brand.findByIdAndUpdate(id, updateData);
     if (!brand) res.json({ message: "Brand not found" });
     res.json({ message: "Brand upidated successfully", brand });

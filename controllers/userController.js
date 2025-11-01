@@ -10,7 +10,7 @@ const createToken = (user) => {
       role: user.role,
     },
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES || "1d" }
+    { expiresIn: process.env.JWT_EXPIRES || "1d" },
   );
 };
 
@@ -55,6 +55,14 @@ const createUser = async (req, res) => {
     });
 
     const token = createToken(user);
+
+    // Admin notification
+    const adminNotification = await Notification.create({
+      message: `${name} has created ー 「 ${email} 」 with Role of 「 ${role} 」`,
+      type: "system",
+      user: null,
+    });
+
     res.status(201).json({
       message: "User added successfully.",
       user: {
@@ -64,6 +72,7 @@ const createUser = async (req, res) => {
         role: user.role,
       },
       token,
+      adminNotification,
     });
   } catch (err) {
     res

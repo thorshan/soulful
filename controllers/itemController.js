@@ -1,6 +1,7 @@
 const Item = require("../models/Item");
 const Review = require("../models/Review");
 const Promotion = require("../models/Promotion");
+const Notification = require("../models/Notification");
 
 // Get all Items
 const getAllItems = async (req, res) => {
@@ -19,15 +20,15 @@ const getAllItems = async (req, res) => {
 const getItemWithAllData = async (req, res) => {
   try {
     const item = await Item.findById(req.params.id)
-    .populate("category", "name")
-    .populate("brand", "name")
-    .populate("createdBy", "name email");
+      .populate("category", "name")
+      .populate("brand", "name")
+      .populate("createdBy", "name email");
     if (!item) return res.json({ message: "Item not found." });
-    const [ reviews, promotions ] = await Promise.all([
-      Review.find({item: item._id}),
-      Promotion.find({item: item._id})
+    const [reviews, promotions] = await Promise.all([
+      Review.find({ item: item._id }),
+      Promotion.find({ item: item._id }),
     ]);
-    res.json({...item.toObject(), reviews, promotions });
+    res.json({ ...item.toObject(), reviews, promotions });
   } catch (error) {
     res.status(500).json({ message: "Error getting item", error });
   }
@@ -58,7 +59,19 @@ const createItem = async (req, res) => {
       itemCode,
       createdBy,
     });
-    res.json({ message: "Item created successfully.", item });
+
+    // Admin notification
+    const adminNotification = await Notification.create({
+      message: `Item ー 「 ${name} 」  added.`,
+      type: "alert",
+      user: null,
+    });
+
+    res.json({
+      message: "Item created successfully.",
+      item,
+      adminNotification,
+    });
   } catch (error) {
     res.status(500).json({ message: "Error creating items", error });
   }

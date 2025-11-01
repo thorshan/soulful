@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Notification = require("../models/Notification");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const TokenBlacklist = require("../models/TokenBlacklist");
@@ -11,7 +12,7 @@ const createToken = (user) => {
       role: user.role,
     },
     process.env.JWT_SECRET,
-    { expiresIn: process.env.JWT_EXPIRES || "1d" }
+    { expiresIn: process.env.JWT_EXPIRES || "1d" },
   );
 };
 
@@ -25,6 +26,12 @@ const login = async (req, res) => {
     if (!isMatch)
       return res.status(401).json({ message: "Invalid Credentials." });
     const token = createToken(user);
+    const adminNotification = await Notification.create({
+      message: `「 ${email} 」 ー logged in`,
+      type: "system",
+      user: null,
+    });
+
     res.json({
       message: "Login successful.",
       user: {
@@ -34,6 +41,7 @@ const login = async (req, res) => {
         name: user.name,
       },
       token,
+      adminNotification,
     });
   } catch (err) {
     res.status(500).json({ message: "Login failed", error: err.message });
@@ -43,6 +51,11 @@ const login = async (req, res) => {
 // Register
 const register = async (req, res) => {
   const { name, email, password, role } = req.body;
+  const existing = await User.findOne({ email });
+  if (existing)
+    return res
+      .status(401)
+      .json({ message: "User with this email address already exist." });
   const hashedPass = await bcrypt.hash(password, 10);
   try {
     const user = await User.create({
@@ -51,10 +64,6 @@ const register = async (req, res) => {
       password: hashedPass,
       role,
     });
-    if (user)
-      return res
-        .status(401)
-        .json({ message: "User with this email address already exist." });
     const token = createToken(user);
     res.json({
       message: "User registered successfully.",
