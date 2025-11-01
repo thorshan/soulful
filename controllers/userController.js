@@ -10,7 +10,11 @@ const createToken = (user) => {
       role: user.role,
     },
     process.env.JWT_SECRET,
+<<<<<<< HEAD
     { expiresIn: process.env.JWT_EXPIRES || "1d" },
+=======
+    { expiresIn: process.env.JWT_EXPIRES || "1d" }
+>>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
   );
 };
 
@@ -55,6 +59,7 @@ const createUser = async (req, res) => {
     });
 
     const token = createToken(user);
+<<<<<<< HEAD
 
     // Admin notification
     const adminNotification = await Notification.create({
@@ -63,6 +68,8 @@ const createUser = async (req, res) => {
       user: null,
     });
 
+=======
+>>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
     res.status(201).json({
       message: "User added successfully.",
       user: {
@@ -72,7 +79,10 @@ const createUser = async (req, res) => {
         role: user.role,
       },
       token,
+<<<<<<< HEAD
       adminNotification,
+=======
+>>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
     });
   } catch (err) {
     res

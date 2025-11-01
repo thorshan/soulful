@@ -1,5 +1,8 @@
 const Review = require("../models/Review");
+<<<<<<< HEAD
 const Notification = require("../models/Notification");
+=======
+>>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
 
 // Get all reviews
 const getAllReviews = async (req, res) => {
@@ -25,6 +28,7 @@ const createReview = async (req, res) => {
       reviewRating,
       user,
     });
+<<<<<<< HEAD
 
     // Admin notification
     const adminNotification = await Notification.create({
@@ -34,6 +38,9 @@ const createReview = async (req, res) => {
     });
 
     res.json({ message: "Review created.", review, adminNotification });
+=======
+    res.json({ message: "Review created.", review });
+>>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
   } catch (error) {
     res.status(500).json({ message: "Error creating review", error });
   }

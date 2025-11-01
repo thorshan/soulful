@@ -1,5 +1,8 @@
 const Brand = require("../models/Brand");
+<<<<<<< HEAD
 const Notification = require("../models/Notification");
+=======
+>>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
 
 // Get all user
 const getAllBrands = async (req, res) => {
@@ -17,8 +20,12 @@ const getAllBrands = async (req, res) => {
 // Create brand
 const createBrand = async (req, res) => {
   try {
+<<<<<<< HEAD
     const { name, image, title, contact, address, incharge, category } =
       req.body;
+=======
+    const { name, image, title, contact, address, incharge, category } = req.body;
+>>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
     const existing = await Brand.findOne({ name });
     if (existing) res.json({ message: "Brand already exist." });
     const brand = await Brand.create({
@@ -30,6 +37,7 @@ const createBrand = async (req, res) => {
       incharge,
       category,
     });
+<<<<<<< HEAD
 
     // Admin notification
     const adminNotification = await Notification.create({
@@ -43,6 +51,9 @@ const createBrand = async (req, res) => {
       brand,
       adminNotification,
     });
+=======
+    res.json({ message: "Brand created successfully.", brand });
+>>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
   } catch (error) {
     res.status(500).json({ message: "Error creating brand.", error });
   }
@@ -65,6 +76,7 @@ const getBrand = async (req, res) => {
 const updateBrand = async (req, res) => {
   try {
     const { id } = req.params;
+<<<<<<< HEAD
     const { name, image, title, contact, address, incharge, category } =
       req.body;
     const updateData = {
@@ -76,6 +88,10 @@ const updateBrand = async (req, res) => {
       incharge,
       category,
     };
+=======
+    const { name, image, title, contact, address, incharge, category } = req.body;
+    const updateData = { name, image, title, contact, address, incharge, category };
+>>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
     const brand = await Brand.findByIdAndUpdate(id, updateData);
     if (!brand) res.json({ message: "Brand not found" });
     res.json({ message: "Brand upidated successfully", brand });
