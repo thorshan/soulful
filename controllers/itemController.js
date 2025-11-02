@@ -1,10 +1,7 @@
 const Item = require("../models/Item");
 const Review = require("../models/Review");
 const Promotion = require("../models/Promotion");
-<<<<<<< HEAD
 const Notification = require("../models/Notification");
-=======
->>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
 
 // Get all Items
 const getAllItems = async (req, res) => {
@@ -12,11 +9,7 @@ const getAllItems = async (req, res) => {
     const items = await Item.find()
       .populate("category", "name")
       .populate("brand", "name")
-<<<<<<< HEAD
       .populate("createdBy", "name")
-=======
-      .populate("createdBy", "name email")
->>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
       .sort({ createdAt: -1 });
     res.json(items);
   } catch (error) {
@@ -24,24 +17,6 @@ const getAllItems = async (req, res) => {
   }
 };
 
-<<<<<<< HEAD
-=======
-// Get item by user
-const getItemByUser = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const items = await Item.find({ createdBy: id })
-      .populate("category", "name")
-      .populate("brand", "name")
-      .populate("createdBy", "name email")
-      .sort({ createdAt: -1 });
-    res.json(items);
-  } catch (error) {
-    res.status(500).json({ message: "Error getting items", error });
-  }
-}
-
->>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
 const getItemWithAllData = async (req, res) => {
   try {
     const item = await Item.findById(req.params.id)
@@ -51,11 +26,7 @@ const getItemWithAllData = async (req, res) => {
     if (!item) return res.json({ message: "Item not found." });
     const [reviews, promotions] = await Promise.all([
       Review.find({ item: item._id }),
-<<<<<<< HEAD
       Promotion.find({ item: item._id }),
-=======
-      Promotion.find({ item: item._id })
->>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
     ]);
     res.json({ ...item.toObject(), reviews, promotions });
   } catch (error) {
@@ -88,7 +59,6 @@ const createItem = async (req, res) => {
       itemCode,
       createdBy,
     });
-<<<<<<< HEAD
 
     // Admin notification
     const adminNotification = await Notification.create({
@@ -102,9 +72,6 @@ const createItem = async (req, res) => {
       item,
       adminNotification,
     });
-=======
-    res.json({ message: "Item created successfully.", item });
->>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
   } catch (error) {
     res.status(500).json({ message: "Error creating items", error });
   }
@@ -178,8 +145,4 @@ module.exports = {
   updateItem,
   deleteItem,
   getItemWithAllData,
-<<<<<<< HEAD
-=======
-  getItemByUser,
->>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
 };

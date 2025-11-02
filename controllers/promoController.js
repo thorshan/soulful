@@ -1,21 +1,13 @@
 const Promotion = require("../models/Promotion");
 const Item = require("../models/Item");
-<<<<<<< HEAD
 const Notification = require("../models/Notification");
-=======
->>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
 
 // Get all promos
 const getAllPromos = async (req, res) => {
   try {
     const promotions = await Promotion.find()
-<<<<<<< HEAD
       .populate("item", "name itemCode price")
       .sort({ createdAt: -1 });
-=======
-    .populate("item", "name itemCode price")
-    .sort({ createdAt: -1 });
->>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
     res.json(promotions);
   } catch (error) {
     res.status(500).json({ message: "Error getting promotions", error });
@@ -27,7 +19,6 @@ const createPromo = async (req, res) => {
   try {
     const { item, title, promoCode, discount, expiryDate } = req.body;
     const existing = await Item.findById(item);
-<<<<<<< HEAD
     if (!existing) res.json({ message: "Item not found" });
     const promo = await Promotion.create({
       item,
@@ -45,13 +36,6 @@ const createPromo = async (req, res) => {
     });
 
     res.json({ message: "Promotion created", promo, adminNotification });
-=======
-    if(!existing) res.json({ message: "Item not found" });
-    const promo = await Promotion.create({
-      item, title, promoCode, discount, expiryDate
-    });
-    res.json({ message: "Promotion created", promo });
->>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
   } catch (error) {
     res.status(500).json({ message: "Error creating promotion", error });
   }
@@ -72,15 +56,10 @@ const getPromo = async (req, res) => {
 const getPromoByItem = async (req, res) => {
   try {
     const { id } = req.params;
-<<<<<<< HEAD
     const promos = await Promotion.find({ item: id }).populate(
       "item",
       "name itemCode price",
     );
-=======
-    const promos = await Promotion.find({ item: id })
-    .populate("item", "name itemCode price");
->>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
     res.json(promos);
   } catch (error) {
     res.status(500).json({ message: "Error getting promotion", error });

@@ -1,9 +1,6 @@
 const Order = require("../models/Order");
-<<<<<<< HEAD
 const socketEmitter = require("../socket/socketEmitter");
 const Notification = require("../models/Notification");
-=======
->>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
 
 // Get all orders
 const getAllOrders = async (req, res) => {
@@ -20,22 +17,15 @@ const getAllOrders = async (req, res) => {
 // Create order
 const createOrder = async (req, res) => {
   try {
-<<<<<<< HEAD
     const { cart, deliAddress, deliContact, orderNumber } = req.body;
 
     const order = await Order.create({
       user: req.user._id,
-=======
-    const { user, cart, deliAddress, deliContact, orderNumber } = req.body;
-    const order = await Order.create({
-      user,
->>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
       cart,
       deliAddress,
       deliContact,
       orderNumber,
     });
-<<<<<<< HEAD
 
     // User notification
     const userNotification = await Notification.create({
@@ -68,10 +58,6 @@ const createOrder = async (req, res) => {
     res.json({ order, userNotification, adminNotification });
   } catch (error) {
     console.error(error);
-=======
-    res.json({ message: "Order created", order });
-  } catch (error) {
->>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
     res.status(500).json({ message: "Error creating order", error });
   }
 };
@@ -91,14 +77,7 @@ const getOrder = async (req, res) => {
 const getOrderByUser = async (req, res) => {
   try {
     const { id } = req.params;
-<<<<<<< HEAD
     const order = await Order.find({ user: id }).populate("user", "name email");
-=======
-    const order = await Order.find({ user: id }).populate(
-      "user",
-      "name email"
-    );
->>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
     if (!order) res.json({ message: "Cannot find user's order" });
     res.json(order);
   } catch (error) {
@@ -133,22 +112,15 @@ const updateOrder = async (req, res) => {
 const deleteOrder = async (req, res) => {
   try {
     const order = await Order.findById(req.params.id);
-<<<<<<< HEAD
     if (!order) res.json({ message: "Order not found" });
     await Order.findByIdAndDelete(order._id);
     res.json({ message: "Order deleted" });
-=======
-    if(!order) res.json({ message: "Order not found" });
-    await Order.findByIdAndDelete(order._id);
-    res.json({ message: "Order deleted" })
->>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
   } catch (error) {
     res.status(500).json({ message: "Error deleting order", error });
   }
 };
 
 module.exports = {
-<<<<<<< HEAD
   getAllOrders,
   createOrder,
   getOrder,
@@ -156,12 +128,3 @@ module.exports = {
   updateOrder,
   deleteOrder,
 };
-=======
-    getAllOrders,
-    createOrder,
-    getOrder,
-    getOrderByUser,
-    updateOrder,
-    deleteOrder,
-}
->>>>>>> 98e6164b887e97a6da26340894d2c511a366ddac
